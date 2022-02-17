@@ -1,10 +1,12 @@
 {
   "private": true,
   "scripts": {
-		"dev": "node server",
+    "dev": "node server",
+    "build:client": "vite build --outDir dist/client --ssrManifest",
+    "build:server": "vite build --outDir dist/server --ssr src/entry-server.js",
+    "build": "pnpm run build:client && pnpm run build:server",
     "lint": "eslint \"**/*.{vue,ts,js}\"",
-    "preview": "vite preview",
-    "preview-https": "serve dist",
+		"prod": "NODE_ENV=production node server",
     "test": "vitest",
     "test:e2e": "cypress open",
     "test:unit": "vitest",
