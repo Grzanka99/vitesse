@@ -1,20 +1,34 @@
-import { ViteSSG } from 'vite-ssg'
-import generatedRoutes from 'virtual:generated-pages'
-import { setupLayouts } from 'virtual:generated-layouts'
+import { createSSRApp } from 'vue'
+import { createHead } from '@vueuse/head'
+
 import App from './App.vue'
 
 import '@unocss/reset/tailwind.css'
 import './styles/main.css'
 import 'uno.css'
+import { createRouter } from './router'
 
-const routes = setupLayouts(generatedRoutes)
+// SSR requires a fresh app instance per request, therefore we export a function
+// that creates a fresh app instance. If using Vuex, we'd also be creating a
+// fresh store here.
+export function createApp() {
+  const app = createSSRApp(App)
+  const router = createRouter()
+  const head = createHead()
 
-// https://github.com/antfu/vite-ssg
-export const createApp = ViteSSG(
-  App,
-  { routes, base: import.meta.env.BASE_URL },
-  (ctx) => {
-    // install all modules under `modules/`
-    Object.values(import.meta.globEager('./modules/*.ts')).forEach(i => i.install?.(ctx))
-  },
-)
+  const ctx = {
+    app,
+    initialState: {},
+    router,
+    isClient: false,
+  }
+
+  Object.values(import.meta.globEager('./modules/*.ts')).forEach(i =>
+    i.install?.(ctx),
+  )
+
+  app.use(head)
+  app.use(router)
+
+  return { app, router }
+}

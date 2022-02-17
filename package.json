@@ -1,8 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "build": "vite-ssg build",
-    "dev": "vite --port 3333 --open",
+		"dev": "node server",
     "lint": "eslint \"**/*.{vue,ts,js}\"",
     "preview": "vite preview",
     "preview-https": "serve dist",
@@ -54,7 +53,6 @@
     "vite-plugin-pages": "^0.20.2",
     "vite-plugin-pwa": "^0.11.13",
     "vite-plugin-vue-layouts": "^0.6.0",
-    "vite-ssg": "^0.17.10",
     "vitest": "^0.3.6",
     "vue-tsc": "^0.31.4"
   }
